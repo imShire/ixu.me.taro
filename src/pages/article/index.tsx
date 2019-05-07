@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, RichText } from '@tarojs/components'
 
 
 import './index.scss'
@@ -61,6 +61,7 @@ class Article extends Component {
 
   componentDidHide () { }
   state = {
+    nodes: '<p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><div>xxeqwgdffg</div>',
     posts: [
       {id: 1, title: 'Hello World', content: 'Welcome to learning Taro!'},
       {id: 2, title: 'Installation', content: 'You can install Taro from npm.'}
@@ -85,6 +86,7 @@ class Article extends Component {
         <View onClick={this.onClick}><Text>Hello, World</Text></View>
         <Text>现在的时间是 {this.state}.</Text>
         {content}
+        <RichText nodes={this.state.nodes}></RichText>
       </View>
     )
   }

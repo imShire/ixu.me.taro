@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
+import { View, Button, Text, ScrollView, Image } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 import { add, minus, asyncAdd } from '../../actions/counter'
@@ -42,44 +42,58 @@ interface Index {
 @connect(({ counter }) => ({
   counter
 }), (dispatch) => ({
-  add () {
+  add() {
     dispatch(add())
   },
-  dec () {
+  dec() {
     dispatch(minus())
   },
-  asyncAdd () {
+  asyncAdd() {
     dispatch(asyncAdd())
   }
 }))
 class Index extends Component {
+  constructor() {
+    super(...arguments)
+  }
 
-    /**
-   * 指定config的类型声明为: Taro.Config
-   *
-   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
-   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
-   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
-    config = {
+  /**
+ * 指定config的类型声明为: Taro.Config
+ *
+ * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
+ * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
+ * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
+ */
+  config = {
     navigationBarTitleText: '首页'
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps)
   }
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentWillmount () {
+  componentWillmount() {
     console.log('this.$router.params', this.$router.params) // 输出 { id: 2, type: 'test' }
   }
 
-  componentDidMount () {}
+  componentDidMount() { }
 
-  componentDidShow () {
+  componentDidShow() {
     this.setState({
       date: '1'
     })
+  }
+  state = {
+    posts: [
+      {id: 1, title: 'Hello World', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'Welcome to learning Taro!'},
+      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'},
+      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'},
+      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'},
+      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'},
+      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'},
+      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'}
+    ]
   }
   onClick = (e) => {
     e.stopPropagation()
@@ -87,18 +101,58 @@ class Index extends Component {
       url: '/pages/article/index'
     })
   }
+  // 滚动到顶部
+  onScrollToUpper = (e) => {
+  }
+  // 滚动到底部
+  onScrollToLower = (e) => {
+  }
+  // 滚动时触发
+  onScroll = (event) => {
+    // event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY}
+    console.log('onScroll', event.detail);
+  }
 
-  componentDidHide () { }
+  componentDidHide() { }
 
-  render () {
-    return (
-      <View className='index'>
+  render() {
+    const scrollTop = 0
+    const Threshold = 20
+    const scrollStyle = {
+      height: '100vh'
+    }
+    const ImageStyle = {
+      width: '100%',
+      height: '120px',
+      background: '#fff',
+    }
+    const { posts } = this.state
+    const articleItemList = posts.map((post) => {
+      return <View className='article-item'>
+        <Image
+          style={ImageStyle}
+          src={post.img}
+        />
         <View onClick={this.onClick}><Text>Hello, World</Text></View>
-        <Button className='add_btn' onClick={this.props.add}>+</Button>
-        <Button className='dec_btn' onClick={this.props.dec}>-</Button>
-        <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
-        <View><Text>{this.props.counter.num}</Text></View>
       </View>
+    })
+    return (
+      <ScrollView
+        className='page page-article-list scroll-view'
+        scrollY
+        scrollWithAnimation
+        enableBackToTop
+        scrollTop={scrollTop}
+        style={scrollStyle}
+        lowerThreshold={Threshold}
+        upperThreshold={Threshold}
+        onScrollToUpper={this.onScrollToUpper}
+        onScrollToLower={this.onScrollToLower}
+        onScroll={this.onScroll}>
+        <View className='page page-article-list'>
+          {articleItemList}
+        </View>
+      </ScrollView>
     )
   }
 }
