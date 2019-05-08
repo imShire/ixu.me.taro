@@ -51,6 +51,7 @@ const config = {
 
           }
         },
+        // 小程序端样式引用本地资源内联配置
         url: {
           enable: true,
           config: {
@@ -68,6 +69,7 @@ const config = {
     }
   },
   h5: {
+    esnextModules: ['taro-ui'],
     // NOTE H5 打包静态资源时带 hash 值，方便缓存、版本管理
     router: {
       mode: 'browser', // 或者是 'hash'

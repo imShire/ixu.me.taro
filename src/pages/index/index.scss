@@ -1,0 +1,53 @@
+
+.article-item {
+  width: 100%;
+  overflow-x: hidden;
+  color: #232323;
+  position: relative;
+
+  &-title {
+    font-size: 36px;
+    padding: 8px 20px;
+  }
+
+  &-thumb {
+    padding: 0 20px;
+  }
+
+  &-desc {
+    text-indent: 2em;
+    padding: 8px 20px ;
+    font-size: 28px;
+    color: #464646;
+    line-height: 46px;
+    max-height: 44*3px;
+    overflow: hidden;
+
+    &-inner {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+  }
+
+  &-tag {
+    padding: 8px 24px ;
+    font-size: 24px;
+    color: #878787;
+  }
+
+  &-time,
+  &-view {
+    margin-right: 16px;
+    margin-left: 8px;
+  }
+
+  &-line {
+    width: 100%;
+    height: 2px;
+    background: #eeeeee;
+    margin-left: 20px;
+  }
+}

@@ -1,7 +1,10 @@
 import { ComponentClass } from 'react'
-import Taro, { Component } from '@tarojs/taro'
+import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Button, Text, ScrollView, Image } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
+import { AtTabBar, AtIcon } from 'taro-ui'
+// @import "~taro-ui/dist/style/components/tab-bar.scss";
+// @import "~taro-ui/dist/style/components/badge.scss";
 
 import { add, minus, asyncAdd } from '../../actions/counter'
 
@@ -56,6 +59,18 @@ class Index extends Component {
   constructor() {
     super(...arguments)
   }
+  state = {
+    current: 0,
+    posts: [
+      { id: 1, title: 'Hello World', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'Welcome to learning Taro!' },
+      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.' },
+      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: '由于 typescript 对于 object 类型推导只能推出 Key 的基本类型,的基本类型..由于 typescript 对于 object 类型推导只能推出 Key 的基本类型,的基本类型由于 typescript 对于 object 类型推导只能推出 Key 的基本类型,的基本类型' },
+      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.' },
+      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.' },
+      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.' },
+      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.' }
+    ]
+  }
 
   /**
  * 指定config的类型声明为: Taro.Config
@@ -64,7 +79,7 @@ class Index extends Component {
  * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
  * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
  */
-  config = {
+  config: Config = {
     navigationBarTitleText: '首页'
   }
 
@@ -84,18 +99,7 @@ class Index extends Component {
       date: '1'
     })
   }
-  state = {
-    posts: [
-      {id: 1, title: 'Hello World', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'Welcome to learning Taro!'},
-      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'},
-      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'},
-      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'},
-      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'},
-      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'},
-      {id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.'}
-    ]
-  }
-  onClick = (e) => {
+  pushArticleDetail = (e) => {
     e.stopPropagation()
     Taro.navigateTo({
       url: '/pages/article/index'
@@ -112,6 +116,11 @@ class Index extends Component {
     // event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY}
     console.log('onScroll', event.detail);
   }
+  handleClick(value) {
+    this.setState({
+      current: value
+    })
+  }
 
   componentDidHide() { }
 
@@ -123,36 +132,59 @@ class Index extends Component {
     }
     const ImageStyle = {
       width: '100%',
-      height: '120px',
+      height: '160px',
       background: '#fff',
     }
     const { posts } = this.state
-    const articleItemList = posts.map((post) => {
-      return <View className='article-item'>
-        <Image
-          style={ImageStyle}
-          src={post.img}
-        />
-        <View onClick={this.onClick}><Text>Hello, World</Text></View>
+    const articleItemList = posts.map((article) => {
+      return <View className='article-item' onClick={this.pushArticleDetail}>
+        <View className='article-item-title'><Text>{article.title}</Text></View>
+        <View className='article-item-thumb'>
+          <Image
+            style={ImageStyle}
+            src={article.img}
+          />
+        </View>
+        <View className='article-item-desc'><Text className='article-item-desc-inner'>{article.content}</Text></View>
+        <View className='article-item-tag'>
+          <AtIcon value='calendar' size='14'></AtIcon>
+          <Text className='article-item-time'>2019-05-08</Text>
+          <AtIcon value='eye' size='18'></AtIcon>
+          <Text className='article-item-view'>3548</Text>
+        </View>
+        <View className='article-item-line'></View>
       </View>
     })
     return (
-      <ScrollView
-        className='page page-article-list scroll-view'
-        scrollY
-        scrollWithAnimation
-        enableBackToTop
-        scrollTop={scrollTop}
-        style={scrollStyle}
-        lowerThreshold={Threshold}
-        upperThreshold={Threshold}
-        onScrollToUpper={this.onScrollToUpper}
-        onScrollToLower={this.onScrollToLower}
-        onScroll={this.onScroll}>
-        <View className='page page-article-list'>
-          {articleItemList}
-        </View>
-      </ScrollView>
+      <View>
+
+        <ScrollView
+          className='page page-article-list scroll-view'
+          scrollY
+          scrollWithAnimation
+          enableBackToTop
+          scrollTop={scrollTop}
+          style={scrollStyle}
+          lowerThreshold={Threshold}
+          upperThreshold={Threshold}
+          onScrollToUpper={this.onScrollToUpper}
+          onScrollToLower={this.onScrollToLower}
+          onScroll={this.onScroll}>
+          <View className='page page-article-list'>
+            {articleItemList}
+          </View>
+        </ScrollView>
+        <AtTabBar
+          fixed
+          tabList={[
+            { title: '首页', iconType: 'home' },
+            { title: '专题', iconType: 'lightning-bolt' },
+            { title: '我', iconType: 'user'}
+          ]}
+          onClick={this.handleClick.bind(this)}
+          current={this.state.current}
+        />
+      </View>
     )
   }
 }
