@@ -27,14 +27,43 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      'pages/index/index',
-      'pages/article/index'
+      'pages/home/index', // 首页
+      'pages/article/index', // 详情
+      'pages/project/index', // 专题
+      'pages/user/index', // 我
+
+      'pages/history/index', // 最近浏览
+      'pages/service/index', // 项目合作
+      'pages/contact/index', // 联系作者
+      'pages/about/index', // 关于小程序
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
+      navigationBarTitleText: 'IXU.ME',
       navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      color: "#666",
+      selectedColor: "#232323",
+      backgroundColor: "#fff",
+      borderStyle: 'black',
+      list: [{
+        pagePath: "pages/home/index",
+        iconPath: "./assets/tab-bar/home@2x.png",
+        selectedIconPath: "./assets/tab-bar/home-active@2x.png",
+        text: "首页"
+      }, {
+        pagePath: "pages/project/index",
+        iconPath: "./assets/tab-bar/project@2x.png",
+        selectedIconPath: "./assets/tab-bar/project-active@2x.png",
+        text: "专题"
+      }, {
+        pagePath: "pages/user/index",
+        iconPath: "./assets/tab-bar/user@2x.png",
+        selectedIconPath: "./assets/tab-bar/user-active@2x.png",
+        text: "我"
+      }]
     }
   }
 
