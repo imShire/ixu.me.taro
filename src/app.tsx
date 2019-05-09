@@ -50,18 +50,18 @@ class App extends Component {
       borderStyle: 'black',
       list: [{
         pagePath: "pages/home/index",
-        iconPath: "./assets/tab-bar/home@2x.png",
-        selectedIconPath: "./assets/tab-bar/home-active@2x.png",
+        iconPath: "./assets/img/tab-bar/home@2x.png",
+        selectedIconPath: "./assets/img/tab-bar/home-active@2x.png",
         text: "首页"
       }, {
         pagePath: "pages/project/index",
-        iconPath: "./assets/tab-bar/project@2x.png",
-        selectedIconPath: "./assets/tab-bar/project-active@2x.png",
+        iconPath: "./assets/img/tab-bar/project@2x.png",
+        selectedIconPath: "./assets/img/tab-bar/project-active@2x.png",
         text: "专题"
       }, {
         pagePath: "pages/user/index",
-        iconPath: "./assets/tab-bar/user@2x.png",
-        selectedIconPath: "./assets/tab-bar/user-active@2x.png",
+        iconPath: "./assets/img/tab-bar/user@2x.png",
+        selectedIconPath: "./assets/img/tab-bar/user-active@2x.png",
         text: "我"
       }]
     }
