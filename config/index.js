@@ -1,3 +1,5 @@
+import { resolve } from 'path';
+
 const config = {
   projectName: 'taro-dev',
   date: '2019-5-5',
@@ -25,6 +27,16 @@ const config = {
     }
   },
   defineConstants: {
+  },
+  alias: {
+    '@': resolve(__dirname, '..', 'src'),
+    '@actions': resolve(__dirname, '..', 'src/actions'),
+    '@assets': resolve(__dirname, '..', 'src/assets'),
+    '@components': resolve(__dirname, '..', 'src/components'),
+    '@constants': resolve(__dirname, '..', 'src/constants'),
+    '@reducers': resolve(__dirname, '..', 'src/reducers'),
+    // '@styles': resolve(__dirname, '..', 'src/styles'),
+    '@utils': resolve(__dirname, '..', 'src/utils')
   },
   copy: {
     patterns: [
@@ -104,7 +116,7 @@ const config = {
   }
 }
 
-module.exports = function (merge) {
+export default function (merge) {
   if (process.env.NODE_ENV === 'development') {
     return merge({}, config, require('./dev'))
   }

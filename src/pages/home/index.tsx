@@ -6,7 +6,9 @@ import { AtTabBar, AtIcon } from 'taro-ui'
 // @import "~taro-ui/dist/style/components/tab-bar.scss";
 // @import "~taro-ui/dist/style/components/badge.scss";
 
+import fetch from '../../utils/request'
 import { add, minus, asyncAdd } from '../../actions/counter'
+import { POSTS_LIST } from '../../constants/api'
 
 import './index.scss'
 
@@ -95,8 +97,9 @@ class Index extends Component {
   componentDidMount() { }
 
   componentDidShow() {
-    this.setState({
-      date: '1'
+    fetch({ url: POSTS_LIST, method : 'POST' }).then((res) => {
+      if (res) {
+      }
     })
   }
   pushArticleDetail = (e) => {
