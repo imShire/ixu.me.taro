@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+var path = require('path');
 
 const config = {
   projectName: 'taro-dev',
@@ -29,14 +29,14 @@ const config = {
   defineConstants: {
   },
   alias: {
-    '@': resolve(__dirname, '..', 'src'),
-    '@actions': resolve(__dirname, '..', 'src/actions'),
-    '@assets': resolve(__dirname, '..', 'src/assets'),
-    '@components': resolve(__dirname, '..', 'src/components'),
-    '@constants': resolve(__dirname, '..', 'src/constants'),
-    '@reducers': resolve(__dirname, '..', 'src/reducers'),
-    // '@styles': resolve(__dirname, '..', 'src/styles'),
-    '@utils': resolve(__dirname, '..', 'src/utils')
+    '@': path.resolve(__dirname, '..', 'src'),
+    '@actions': path.resolve(__dirname, '..', 'src/actions'),
+    '@assets': path.resolve(__dirname, '..', 'src/assets'),
+    '@components': path.resolve(__dirname, '..', 'src/components'),
+    '@constants': path.resolve(__dirname, '..', 'src/constants'),
+    '@reducers': path.resolve(__dirname, '..', 'src/reducers'),
+    // '@styles': path.resolve(__dirname, '..', 'src/styles'),
+    '@utils': path.resolve(__dirname, '..', 'src/utils')
   },
   copy: {
     patterns: [
@@ -80,6 +80,11 @@ const config = {
       }
     }
   },
+  rn: {
+    appJson: {
+        "name": "taroDemo",
+    }
+  },
   h5: {
     esnextModules: ['taro-ui'],
     // NOTE H5 打包静态资源时带 hash 值，方便缓存、版本管理
@@ -116,7 +121,7 @@ const config = {
   }
 }
 
-export default function (merge) {
+module.exports =  function (merge) {
   if (process.env.NODE_ENV === 'development') {
     return merge({}, config, require('./dev'))
   }

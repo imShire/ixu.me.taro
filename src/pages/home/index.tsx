@@ -2,7 +2,7 @@ import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Button, Text, ScrollView, Image } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import { AtTabBar, AtIcon } from 'taro-ui'
+// import { AtTabBar, AtIcon } from 'taro-ui'
 // @import "~taro-ui/dist/style/components/tab-bar.scss";
 // @import "~taro-ui/dist/style/components/badge.scss";
 
@@ -117,7 +117,7 @@ class Index extends Component {
   // 滚动时触发
   onScroll = (event) => {
     // event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY}
-    console.log('onScroll', event.detail);
+    // console.log('onScroll', event.detail);
   }
   handleClick(value) {
     this.setState({
@@ -131,16 +131,16 @@ class Index extends Component {
     const scrollTop = 0
     const Threshold = 20
     const scrollStyle = {
-      height: '100vh'
+      height: 100
     }
     const ImageStyle = {
       width: '100%',
-      height: '160px',
+      height: 160,
       background: '#fff',
     }
     const { posts } = this.state
-    const articleItemList = posts.map((article) => {
-      return <View className='article-item' onClick={this.pushArticleDetail}>
+    const articleItemList = posts.map((article,index) => {
+      return <View className='article-item' onClick={this.pushArticleDetail} key={index}>
         <View className='article-item-title'><Text>{article.title}</Text></View>
         <View className='article-item-thumb'>
           <Image
@@ -150,9 +150,9 @@ class Index extends Component {
         </View>
         <View className='article-item-desc'><Text className='article-item-desc-inner'>{article.content}</Text></View>
         <View className='article-item-tag'>
-          <AtIcon value='calendar' size='14'></AtIcon>
+          {/* <AtIcon value='calendar' size='14'></AtIcon> */}
           <Text className='article-item-time'>2019-05-08</Text>
-          <AtIcon value='eye' size='18'></AtIcon>
+          {/* <AtIcon value='eye' size='18'></AtIcon> */}
           <Text className='article-item-view'>3548</Text>
         </View>
         <View className='article-item-line'></View>
@@ -177,7 +177,7 @@ class Index extends Component {
             {articleItemList}
           </View>
         </ScrollView>
-        <AtTabBar
+        {/* <AtTabBar
           fixed
           tabList={[
             { title: '首页', iconType: 'home' },
@@ -186,7 +186,7 @@ class Index extends Component {
           ]}
           onClick={this.handleClick.bind(this)}
           current={this.state.current}
-        />
+        /> */}
       </View>
     )
   }
