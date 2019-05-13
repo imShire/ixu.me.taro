@@ -1,7 +1,11 @@
 export const HTTP_STATUS = {
-  SUCCESS: 200,
+  // 成功
+  SUCCESS: 0,
+  // 错误
+  ERROR: 0,
+  // token 失效
+  AUTHENTICATE: 80001,
   CLIENT_ERROR: 400,
-  AUTHENTICATE: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
   SERVER_ERROR: 500,

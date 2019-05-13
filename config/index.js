@@ -87,6 +87,18 @@ const config = {
   },
   h5: {
     esnextModules: ['taro-ui'],
+    // devServer: {
+    //   proxy: [
+    //     '/api/**': {
+    //       target: 'http://vip.ixu.me/',
+    //       changeOrigin: true,
+    //       secure: true,
+    //       pathRewrite: {
+    //         '^/api': '/api'
+    //       }
+    //     }
+    //   ]
+    // },
     // NOTE H5 打包静态资源时带 hash 值，方便缓存、版本管理
     router: {
       mode: 'browser', // 或者是 'hash'

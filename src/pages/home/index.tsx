@@ -11,6 +11,7 @@ import { add, minus, asyncAdd } from '../../actions/counter'
 import { POSTS_LIST } from '../../constants/api'
 
 import './index.scss'
+import { array } from 'prop-types';
 
 // #region 书写注意
 //
@@ -40,38 +41,38 @@ type PageState = {}
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface Index {
-  props: IProps;
-}
 
-@connect(({ counter }) => ({
-  counter
-}), (dispatch) => ({
-  add() {
-    dispatch(add())
-  },
-  dec() {
-    dispatch(minus())
-  },
-  asyncAdd() {
-    dispatch(asyncAdd())
-  }
-}))
-class Index extends Component {
+
+interface Article {
+  id: number,
+  post_author: string,
+  img: string,
+  post_date: any,
+  post_content: string,
+  post_title: string,
+  post_name: string,
+  post_type: string,
+  post_status: string,
+  comment_status: string,
+  comment_count: string,
+}
+interface Page {
+  page: number,
+  page_size: number,
+  total: number,
+  total_page: number,
+}
+interface IState {
+  listPage?: object;
+  listData?: Article[];
+}
+class Index extends Component<IProps, IState> {
   constructor() {
     super(...arguments)
   }
-  state = {
-    current: 0,
-    posts: [
-      { id: 1, title: 'Hello World', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'Welcome to learning Taro!' },
-      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.' },
-      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: '由于 typescript 对于 object 类型推导只能推出 Key 的基本类型,的基本类型..由于 typescript 对于 object 类型推导只能推出 Key 的基本类型,的基本类型由于 typescript 对于 object 类型推导只能推出 Key 的基本类型,的基本类型' },
-      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.' },
-      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.' },
-      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.' },
-      { id: 2, title: 'Installation', img: 'https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png', content: 'You can install Taro from npm.' }
-    ]
+  state: IState = {
+    listPage: {},
+    listData: []
   }
 
   /**
@@ -96,11 +97,16 @@ class Index extends Component {
 
   componentDidMount() { }
 
-  componentDidShow() {
-    fetch({ url: POSTS_LIST, method : 'POST' }).then((res) => {
-      if (res) {
-      }
+  async componentDidShow() {
+    const res = await fetch({ url: POSTS_LIST, method: 'POST' })
+    let data = res.data;
+    this.setState({
+      listData: data.result,
+      listPage: data.pagination
     })
+    console.log(POSTS_LIST, this.state.listPage);
+    console.log(POSTS_LIST, this.state.listData);
+
   }
   pushArticleDetail = (e) => {
     e.stopPropagation()
@@ -120,9 +126,6 @@ class Index extends Component {
     // console.log('onScroll', event.detail);
   }
   handleClick(value) {
-    this.setState({
-      current: value
-    })
   }
 
   componentDidHide() { }
@@ -138,24 +141,26 @@ class Index extends Component {
       height: 160,
       background: '#fff',
     }
-    const { posts } = this.state
-    const articleItemList = posts.map((article,index) => {
+    const { listData } = this.state
+    const articleItemList = listData.map((article, index) => {
       return <View className='article-item' onClick={this.pushArticleDetail} key={index}>
-        <View className='article-item-title'><Text>{article.title}</Text></View>
-        <View className='article-item-thumb'>
+        <View className='article-item--title'><Text>{article.post_title}</Text></View>
+        <View className='article-item--thumb'>
           <Image
             style={ImageStyle}
             src={article.img}
           />
         </View>
-        <View className='article-item-desc'><Text className='article-item-desc-inner'>{article.content}</Text></View>
-        <View className='article-item-tag'>
-          {/* <AtIcon value='calendar' size='14'></AtIcon> */}
-          <Text className='article-item-time'>2019-05-08</Text>
-          {/* <AtIcon value='eye' size='18'></AtIcon> */}
-          <Text className='article-item-view'>3548</Text>
+        <View className='article-item--desc'>
+          <Text className='article-item-desc-inner' >{article.post_content}</Text>
         </View>
-        <View className='article-item-line'></View>
+        <View className='article-item--tag'>
+          {/* <AtIcon value='calendar' size='14'></AtIcon> */}
+          <Text className='article-item--time'>{article.post_date}</Text>
+          {/* <AtIcon value='eye' size='18'></AtIcon> */}
+          <Text className='article-item--view'>{article.comment_count}</Text>
+        </View>
+        <View className='article-item--line'></View>
       </View>
     })
     return (

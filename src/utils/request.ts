@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import {HTTP_STATUS} from '../constants/ecode';
+import { HTTP_STATUS } from '../constants/ecode';
 
 function getStorage(key) {
   return Taro.getStorage({ key }).then(res => res.data).catch(() => '')
@@ -8,7 +8,7 @@ function getStorage(key) {
 function updateStorage(data = {}) {
   return Promise.all([
     Taro.setStorage({ key: 'token', data: data['3rdSession'] || '' }),
-    Taro.setStorage({ key: 'uid', data: data['uid'] || ''})
+    Taro.setStorage({ key: 'uid', data: data['uid'] || '' })
   ])
 }
 
@@ -31,15 +31,22 @@ export default async function fetch(options) {
     data: payload,
     header
   }).then(async (res) => {
-    const { code, data } = res.data
-    if (code !== HTTP_STATUS.SUCCESS) {
-      if (code === HTTP_STATUS.AUTHENTICATE) {
-        await updateStorage({})
-      }
+    const { code, msg } = res.data
+    if (code != HTTP_STATUS.SUCCESS) {
       return Promise.reject(res.data)
     }
-
-    return data
+    switch (Number(code)) {
+      case HTTP_STATUS.SUCCESS: // 0
+        return res.data;
+        case HTTP_STATUS.ERROR: // 1
+          Taro.showToast({
+            title: msg,
+            icon: 'none'
+          })
+          // return Promise.reject(res.data)
+      case HTTP_STATUS.AUTHENTICATE: // 1
+        return Promise.reject(res.data)
+    }
   }).catch((err) => {
     const defaultMsg = err.code === HTTP_STATUS.AUTHENTICATE ? '登录失效' : '请求异常'
     if (showToast) {
