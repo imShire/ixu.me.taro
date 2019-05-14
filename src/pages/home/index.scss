@@ -1,7 +1,4 @@
 @import "../../assets/scss/style";
-.page-article-list{
-
-}
 .article-item {
   width: 100%;
   // overflow-x: hidden;
@@ -22,18 +19,9 @@
     padding: 8px 20px ;
     font-size: 28px;
     color: #464646;
-    line-height: 46px;
-    max-height: 44*3px;
-    overflow: hidden;
 
-    &--inner {
-      overflow: hidden;
-      // text-overflow: ellipsis;
-      display: flex;
-      // line-clamp: 3;
-      // box-orient: vertical;
-      // -webkit-line-clamp: 3;
-      // -webkit-box-orient: vertical;
+    &_inner {
+      @include lamp-clamp(3);
     }
   }
 

@@ -18,7 +18,7 @@ function updateStorage(data = {}) {
  * @param {*} options
  */
 export default async function fetch(options) {
-  const { url, payload, method = 'GET', showToast = true, autoLogin = true } = options
+  const { url, params, method = 'GET', showToast = true, autoLogin = true } = options
   const token = await getStorage('token')
   const header = token ? { 'WX-PIN-SESSION': token, 'X-WX-3RD-Session': token } : {}
   if (method === 'POST') {
@@ -28,7 +28,7 @@ export default async function fetch(options) {
   return Taro.request({
     url,
     method,
-    data: payload,
+    data: params,
     header
   }).then(async (res) => {
     const { code, msg } = res.data

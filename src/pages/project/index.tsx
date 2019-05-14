@@ -1,8 +1,9 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text, RichText } from '@tarojs/components'
-
-
+import { View, Button, Text, ScrollView, Image } from '@tarojs/components'
+import fetch from '../../utils/request'
+import { POSTS_LIST } from '../../constants/api'
+import { filterHtmlTags } from '../../utils/dom';
 import './index.scss'
 
 // #region 书写注意
@@ -14,6 +15,7 @@ import './index.scss'
 // ref: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20796
 //
 // #endregion
+
 type PageStateProps = {
   counter: {
     num: number,
@@ -32,61 +34,139 @@ type PageState = {}
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface Article {
-  props: IProps;
-}
-class Article extends Component {
 
-    /**
-   * 指定config的类型声明为: Taro.Config
-   *
-   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
-   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
-   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
+
+interface Article {
+  id: number,
+  post_author: string,
+  img: string,
+  post_date: any,
+  post_content: string,
+  post_title: string,
+  post_name: string,
+  post_type: string,
+  post_status: string,
+  comment_status: string,
+  comment_count: string,
+}
+interface Page {
+  page: number,
+  page_size: number,
+  total: number,
+  total_page: number,
+}
+interface IState {
+  listPage?: object;
+  listData?: Article[];
+}
+class Index extends Component<IProps, IState> {
+  constructor() {
+    super(...arguments)
+  }
+  state: IState = {
+    listPage: {},
+    listData: []
+  }
+
+  /**
+ * 指定config的类型声明为: Taro.Config
+ *
+ * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
+ * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
+ * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
+ */
   config: Config = {
     navigationBarTitleText: '首页'
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps)
   }
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentDidMount () {
+  componentWillmount() {
+    console.log('this.$router.params', this.$router.params) // 输出 { id: 2, type: 'test' }
   }
 
-  componentDidShow () {
-  }
+  componentDidMount() { }
 
-  componentDidHide () { }
-  state = {
-    nodes: '<p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><div>xxeqwgdffg</div>',
-    posts: [
-      {id: 1, title: 'Hello World', content: 'Welcome to learning Taro!'},
-      {id: 2, title: 'Installation', content: 'You can install Taro from npm.'}
-    ]
+  async componentDidShow() {
+    const res = await fetch({ url: POSTS_LIST, method: 'POST' })
+    let data = res.data;
+    this.setState({
+      listData: data.result,
+      listPage: data.pagination
+    })
+    console.log(POSTS_LIST, this.state.listPage);
+    console.log(POSTS_LIST, this.state.listData);
+
   }
-  onClick = (e) => {
+  pushArticleDetail = (e) => {
     e.stopPropagation()
     Taro.navigateTo({
-      url: '/pages/index/index'
+      url: '/pages/article/index'
     })
   }
-  render () {
-    const { posts } = this.state
-    const content = posts.map((post) => {
-      return <View key={post.id}>
-        <Text>{post.title}</Text>
-        <Text>{post.content}</Text>
+  // 滚动到顶部
+  onScrollToUpper = (event) => {
+    console.log('onScrollToUpper', event);
+  }
+  // 滚动到底部
+  onScrollToLower = (event) => {
+    console.log('onScrollToLower', event);
+  }
+  // 滚动时触发
+  onScroll = (event) => {
+    // event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY}
+    // console.log('onScroll', event.detail);
+  }
+  handleClick(value) {
+  }
+
+  componentDidHide() { }
+
+  render() {
+    const scrollTop = 0
+    const Threshold = 20
+    // const scrollStyle = {
+    //   height: 100
+    // }
+    // const ImageStyle = {
+    //   width: '100%',
+    //   height: 160,
+    //   background: '#fff',
+    // }
+    const { listData } = this.state
+    const projectItemList = listData.map((project, index) => {
+      return <View className='project' onClick={this.pushArticleDetail} key={index}>
+        <View className='project--info'>
+          <Text>{project.post_title}</Text>
+        </View>
+        <View className='project--thumb'>
+          <View className="project--thumb_mask"></View>
+          <Image
+            style='width: 100%;height: auto;background: #fff;'
+            src='https://ixu.me/wp-content/themes/JaneCC/img/pic/2.png'
+          />
+        </View>
       </View>
     })
     return (
-      <View className='index'>
-        <View onClick={this.onClick}><Text>Hello, World</Text></View>
-        <Text>现在的时间是 {this.state}.</Text>
-        {content}
-        <RichText nodes={this.state.nodes}></RichText>
+      <View className="page">
+        <ScrollView
+          className='page-scroll-view'
+          scrollY
+          scrollWithAnimation
+          enableBackToTop
+          lowerThreshold={Threshold}
+          upperThreshold={Threshold}
+          onScrollToUpper={this.onScrollToUpper}
+          onScrollToLower={this.onScrollToLower}
+          onScroll={this.onScroll}>
+          <View className='page-project-list'>
+            {projectItemList}
+          </View>
+        </ScrollView>
       </View>
     )
   }
@@ -99,4 +179,4 @@ class Article extends Component {
 //
 // #endregion
 
-export default Article as ComponentClass<PageOwnProps, PageState>
+export default Index as ComponentClass<PageOwnProps, PageState>

@@ -1,17 +1,10 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Button, Text, ScrollView, Image } from '@tarojs/components'
-import { connect } from '@tarojs/redux'
-// import { AtTabBar, AtIcon } from 'taro-ui'
-// @import "~taro-ui/dist/style/components/tab-bar.scss";
-// @import "~taro-ui/dist/style/components/badge.scss";
-
 import fetch from '../../utils/request'
-import { add, minus, asyncAdd } from '../../actions/counter'
 import { POSTS_LIST } from '../../constants/api'
-
+import { filterHtmlTags } from '../../utils/dom';
 import './index.scss'
-import { array } from 'prop-types';
 
 // #region 书写注意
 //
@@ -65,6 +58,7 @@ interface Page {
 interface IState {
   listPage?: object;
   listData?: Article[];
+  loading: boolean;
 }
 class Index extends Component<IProps, IState> {
   constructor() {
@@ -72,7 +66,8 @@ class Index extends Component<IProps, IState> {
   }
   state: IState = {
     listPage: {},
-    listData: []
+    listData: [],
+    loading: false
   }
 
   /**
@@ -98,15 +93,7 @@ class Index extends Component<IProps, IState> {
   componentDidMount() { }
 
   async componentDidShow() {
-    const res = await fetch({ url: POSTS_LIST, method: 'POST' })
-    let data = res.data;
-    this.setState({
-      listData: data.result,
-      listPage: data.pagination
-    })
-    console.log(POSTS_LIST, this.state.listPage);
-    console.log(POSTS_LIST, this.state.listData);
-
+    this.queryList(1);
   }
   pushArticleDetail = (e) => {
     e.stopPropagation()
@@ -114,11 +101,46 @@ class Index extends Component<IProps, IState> {
       url: '/pages/article/index'
     })
   }
+  /**
+   * 列表
+   * @param page 分页
+   */
+  async queryList(page: number, pageSize = 5) {
+    let params = {
+      page: page || 1,
+      pageSize
+    }
+    const res = await fetch({ url: POSTS_LIST, method: 'POST', params: params })
+    let data = res.data;
+    let result = data.result;
+    if (page != 1) {
+      result = [...this.state.listData, ...result]
+    }
+    this.setState({
+      listData: result,
+      listPage: data.pagination,
+      loading: false
+    })
+    console.log(POSTS_LIST, this.state.listPage);
+    console.log(POSTS_LIST, this.state.listData);
+  }
   // 滚动到顶部
-  onScrollToUpper = (e) => {
+  onScrollToUpper = (event) => {
+    console.log('onScrollToUpper', event);
   }
   // 滚动到底部
-  onScrollToLower = (e) => {
+  onScrollToLower = (event) => {
+    if (this.state.loading) {
+      return
+    }
+    console.log('onScrollToLower', event);
+    this.setState({
+      loading: true
+    })
+
+    console.log('this', this);
+    let page = 2;
+    this.queryList(page);
   }
   // 滚动时触发
   onScroll = (event) => {
@@ -131,28 +153,31 @@ class Index extends Component<IProps, IState> {
   componentDidHide() { }
 
   render() {
-    const scrollTop = 0
-    const Threshold = 20
-    const scrollStyle = {
-      height: 100
-    }
-    const ImageStyle = {
-      width: '100%',
-      height: 160,
-      background: '#fff',
-    }
+    const scrollTop = 1
+    const Threshold = 50
+    // const scrollStyle = {
+    //   height: 100
+    // }
+    // const ImageStyle = {
+    //   width: '100%',
+    //   height: 160,
+    //   background: '#fff',
+    // }
     const { listData } = this.state
     const articleItemList = listData.map((article, index) => {
       return <View className='article-item' onClick={this.pushArticleDetail} key={index}>
         <View className='article-item--title'><Text>{article.post_title}</Text></View>
         <View className='article-item--thumb'>
           <Image
-            style={ImageStyle}
-            src={article.img}
+            style='width: 100%;height: auto;background: #fff;'
+            src='https://ixu.me/wp-content/uploads/2015/06/nodejs.png'
           />
         </View>
         <View className='article-item--desc'>
-          <Text className='article-item-desc-inner' >{article.post_content}</Text>
+          <Text className='article-item--desc_inner' >
+            <Text style='color: transparent'>占位</Text>
+            {filterHtmlTags(article.post_content)}
+          </Text>
         </View>
         <View className='article-item--tag'>
           {/* <AtIcon value='calendar' size='14'></AtIcon> */}
@@ -164,23 +189,21 @@ class Index extends Component<IProps, IState> {
       </View>
     })
     return (
-      <View>
-
+      <View className="page">
         <ScrollView
-          className='page page-article-list scroll-view'
+          className='page-scroll-view'
           scrollY
           scrollWithAnimation
           enableBackToTop
-          scrollTop={scrollTop}
-          style={scrollStyle}
           lowerThreshold={Threshold}
           upperThreshold={Threshold}
           onScrollToUpper={this.onScrollToUpper}
           onScrollToLower={this.onScrollToLower}
           onScroll={this.onScroll}>
-          <View className='page page-article-list'>
+          <View className='page-article-list'>
             {articleItemList}
           </View>
+          {this.state.loading && <View>loading...</View>}
         </ScrollView>
         {/* <AtTabBar
           fixed
