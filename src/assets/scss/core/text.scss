@@ -1,0 +1,59 @@
+// @import "../var.scss";
+.text-darker {
+  color: $text-darker;
+}
+
+.text-dark {
+  color: $text-dark;
+}
+
+.text-gray {
+  color: $text-gray;
+}
+
+.text-gray-light {
+  color: $text-gray-light;
+}
+
+.text-primary {
+  color: #409EFF;
+}
+
+.text-success {
+  color: #67C23A;
+}
+
+.text-warning {
+  color: #E6A23C;
+}
+
+.text-danger {
+  color: #F56C6C;
+}
+
+.text-info {
+  color: #909399;
+}
+
+.text-left,
+.t-l {
+  text-align: left;
+}
+
+.text-center,
+.t-c {
+  text-align: center;
+}
+
+.text-right,
+.t-r {
+  text-align: right;
+}
+
+.f-r {
+  float: right;
+}
+
+.f-l {
+  float: left;
+}

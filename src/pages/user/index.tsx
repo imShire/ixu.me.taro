@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text, RichText } from '@tarojs/components'
+import { View, Text, Icon } from '@tarojs/components'
 
 
 import './index.scss'
@@ -37,56 +37,53 @@ interface Article {
 }
 class Article extends Component {
 
-    /**
-   * 指定config的类型声明为: Taro.Config
-   *
-   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
-   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
-   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
+  /**
+ * 指定config的类型声明为: Taro.Config
+ *
+ * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
+ * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
+ * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
+ */
   config: Config = {
     navigationBarTitleText: '首页'
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps)
   }
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentDidMount () {
+  componentDidMount() {
   }
 
-  componentDidShow () {
+  componentDidShow() {
   }
 
-  componentDidHide () { }
+  componentDidHide() { }
   state = {
-    nodes: '<p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><div>xxeqwgdffg</div>',
-    posts: [
-      {id: 1, title: 'Hello World', content: 'Welcome to learning Taro!'},
-      {id: 2, title: 'Installation', content: 'You can install Taro from npm.'}
-    ]
   }
-  onClick = (e) => {
-    e.stopPropagation()
-    Taro.navigateTo({
-      url: '/pages/index/index'
-    })
-  }
-  render () {
-    const { posts } = this.state
-    const content = posts.map((post) => {
-      return <View key={post.id}>
-        <Text>{post.title}</Text>
-        <Text>{post.content}</Text>
-      </View>
-    })
+  render() {
     return (
-      <View className='index'>
-        <View onClick={this.onClick}><Text>Hello, World</Text></View>
-        <Text>现在的时间是 {this.state}.</Text>
-        {content}
-        <RichText nodes={this.state.nodes}></RichText>
+      <View className='page text-darker'>
+        {/* <View><Text>Hello, World</Text></View> */}
+        <View className="user-nav m-y-32 m-l-16 fs-32">
+          <View className="user-nav--item flex flex-dir-left p-y-20 p-l-16">
+            <Text>最近浏览</Text>
+            <Icon size='16' type='success' />
+          </View>
+          <View className="user-nav--item flex flex-dir-left p-y-20 p-l-16">
+            <Text>项目合作</Text>
+            <Icon size='16' type='success' />
+          </View>
+          <View className="user-nav--item flex flex-dir-left p-y-20 p-l-16">
+            <Text>联系作者</Text>
+            <Icon size='16' type='success' />
+          </View>
+          <View className="user-nav--item flex flex-dir-left p-y-20 p-l-16">
+            <Text>关于小程序</Text>
+            <Icon size='16' type='success' />
+          </View>
+        </View>
       </View>
     )
   }

@@ -1,0 +1,72 @@
+$numList: 4,
+8,
+12,
+16,
+20,
+24,
+28,
+32,
+36,
+40,
+44;
+@each $num in $numList {
+    .p-t-#{$num} {
+        padding-top:#{$num}px;
+    }
+    .p-l-#{$num} {
+        padding-left:#{$num}px;
+    }
+    .p-r-#{$num} {
+        padding-right:#{$num}px;
+    }
+    .p-b-#{$num} {
+        padding-bottom:#{$num}px;
+    }
+    .p-x-#{$num} {
+        padding-left: #{$num}px;
+        padding-right: #{$num}px;
+    }
+    .p-y-#{$num} {
+        padding-top: #{$num}px;
+        padding-bottom: #{$num}px;
+    }
+    .m-t-#{$num} {
+        margin-top:#{$num}px;
+    }
+    .m-l-#{$num} {
+        margin-left:#{$num}px;
+    }
+    .m-r-#{$num} {
+        margin-right:#{$num}px;
+    }
+    .m-b-#{$num} {
+        margin-bottom:#{$num}px;
+    }
+    .m-x-#{$num} {
+        margin-left: #{$num}px;
+        margin-right: #{$num}px;
+    }
+    .m-y-#{$num} {
+        margin-top: #{$num}px;
+        margin-bottom: #{$num}px;
+    }
+}
+
+$fontSizeList: 12,
+14,
+16,
+18,
+20,
+22,
+24,
+28,
+32,
+36,
+40,
+44;
+@each $size in $fontSizeList {
+    .fs-#{$size} {
+        font-size:#{$size}px;
+    }
+}
+

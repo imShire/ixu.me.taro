@@ -1,4 +1,4 @@
-@import './assets/scss/reset.scss';
+@import './assets/scss/style.scss';
 
 .fixed {
   bottom: 0;
@@ -8,6 +8,7 @@
 
 .page {
   height: 100%;
+  color: $text-darker;
 }
 
 .page-gray {

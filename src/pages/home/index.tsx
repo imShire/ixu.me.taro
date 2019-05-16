@@ -137,10 +137,10 @@ class Index extends Component<IProps, IState> {
     this.setState({
       loading: true
     })
-
-    console.log('this', this);
-    let page = 2;
-    this.queryList(page);
+    setTimeout(() => {
+      let page = this.state.listPage.page + 1;
+      this.queryList(page);
+    }, 1000);
   }
   // 滚动时触发
   onScroll = (event) => {

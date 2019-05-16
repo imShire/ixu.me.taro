@@ -1,0 +1,7 @@
+@import "../../assets/scss/base";
+
+.user-nav{
+  &--item{
+    @include border(bottom, 1px, solid, $border-gray-light);
+  }
+}
