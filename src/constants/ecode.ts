@@ -5,8 +5,11 @@ export const HTTP_STATUS = {
     ERROR: 1,
     // token 失效
     AUTHENTICATE: 80001,
+
+    // 请求成功
+    OK: 200,
     // 请求错误
-    CLIENT_ERROR: 400,
+    BAD_REQUEST: 400,
     // 未授权，请重新登录
     CLIENT_AUTH_ERROR: 401,
     // 拒绝访问
