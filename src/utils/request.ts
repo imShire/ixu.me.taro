@@ -62,6 +62,6 @@ export default async function fetch(options) {
     //   })
     // }
 
-    return Promise.reject({ message: defaultMsg, ...err })
+    return Promise.reject(err)
   })
 }
