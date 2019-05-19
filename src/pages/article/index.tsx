@@ -1,7 +1,9 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text, RichText } from '@tarojs/components'
+import { View, Text, Image, RichText } from '@tarojs/components'
 
+import fetch from '../../utils/request'
+import { POSTS_ARTICLE } from '../../constants/api'
 
 import './index.scss'
 
@@ -15,15 +17,9 @@ import './index.scss'
 //
 // #endregion
 type PageStateProps = {
-  counter: {
-    num: number,
-  }
 }
 
 type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
 }
 
 type PageOwnProps = {}
@@ -32,61 +28,100 @@ type PageState = {}
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface Article {
+interface Index {
   props: IProps;
 }
-class Article extends Component {
-
-    /**
-   * 指定config的类型声明为: Taro.Config
-   *
-   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
-   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
-   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
+interface IState {
+  infoData?: any;
+}
+class Index extends Component<IProps, IState> {
+  constructor() {
+    super(...arguments)
+  }
+  state: IState = {
+    infoData: {
+      id: '',
+      post_author: '',
+      img: '',
+      post_date: '',
+      post_content: '',
+      post_title: '',
+      post_name: '',
+      post_type: '',
+      post_status: '',
+      comment_status: '',
+      comment_count: '',
+    }
+  }
+  /**
+ * 指定config的类型声明为: Taro.Config
+ *
+ * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
+ * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
+ * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
+ */
   config: Config = {
-    navigationBarTitleText: '首页'
+    navigationBarTitleText: '详情'
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps)
   }
-  componentWillUnmount () { }
+  componentWillUnmount() { }
 
-  componentDidMount () {
+  componentDidMount() {
   }
 
-  componentDidShow () {
+  componentDidShow() {
+    this.queryDetail()
   }
 
-  componentDidHide () { }
-  state = {
-    nodes: '<p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><p>xxxxxxxx</p><div>xxeqwgdffg</div>',
-    posts: [
-      {id: 1, title: 'Hello World', content: 'Welcome to learning Taro!'},
-      {id: 2, title: 'Installation', content: 'You can install Taro from npm.'}
-    ]
-  }
-  onClick = (e) => {
-    e.stopPropagation()
-    Taro.navigateTo({
-      url: '/pages/index/index'
+  componentDidHide() { }
+
+
+  async queryDetail() {
+    let params = {
+      id: this.$router.params.id
+    }
+    const res = await fetch({ url: POSTS_ARTICLE, method: 'POST', params: params })
+    let data = res.data;
+
+    this.setState({
+      infoData: data,
     })
   }
-  render () {
-    const { posts } = this.state
-    const content = posts.map((post) => {
-      return <View key={post.id}>
-        <Text>{post.title}</Text>
-        <Text>{post.content}</Text>
-      </View>
-    })
+
+  render() {
+    // const { infoData } = this.state
     return (
-      <View className='index'>
-        <View onClick={this.onClick}><Text>Hello, World</Text></View>
-        <Text>现在的时间是 {this.state}.</Text>
-        {content}
-        <RichText nodes={this.state.nodes}></RichText>
+      <View className='page text-darker'>
+        <View className='article--thumb'>
+          <Image
+            style='width: 100%;height: auto;background: #fff;'
+            src='https://ixu.me/wp-content/uploads/2015/06/nodejs.png'
+          />
+        </View>
+        <View className='article--title p-x-16'>
+          <Text>{this.state.infoData.post_title}</Text>
+        </View>
+
+        <View className='article--tag flex'>
+          <View className='article--time flex m-r-16'>
+            <View className="ixu-icon ixu-icon-calendar text-gray m-r-8"></View>
+            <Text>{this.state.infoData.post_date}</Text>
+          </View>
+          <View className='article--view flex m-r-16'>
+            <View className="ixu-icon ixu-icon-view text-gray m-r-8"></View>
+            <Text>{this.state.infoData.comment_count}</Text>
+          </View>
+        </View>
+        <View className='article--line'></View>
+
+        <View className='article--desc'>
+          <View className='article--desc__inner' >
+            <RichText nodes={this.state.infoData.post_content}></RichText>
+          </View>
+        </View>
       </View>
     )
   }
@@ -99,4 +134,4 @@ class Article extends Component {
 //
 // #endregion
 
-export default Article as ComponentClass<PageOwnProps, PageState>
+export default Index as ComponentClass<PageOwnProps, PageState>

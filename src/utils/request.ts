@@ -22,7 +22,7 @@ export default async function fetch(options) {
   const token = await getStorage('token')
   const header = token ? { 'WX-PIN-SESSION': token, 'X-WX-3RD-Session': token } : {}
   if (method === 'POST') {
-    header['content-type'] = 'application/json'
+    header['content-type'] = 'application/x-www-form-urlencoded'
   }
 
   return Taro.request({

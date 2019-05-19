@@ -49,12 +49,6 @@ interface Article {
   comment_status: string,
   comment_count: string,
 }
-interface Page {
-  page: number,
-  page_size: number,
-  total: number,
-  total_page: number,
-}
 interface IState {
   listPage?: object;
   listData?: Article[];
@@ -95,10 +89,10 @@ class Index extends Component<IProps, IState> {
   async componentDidShow() {
     this.queryList(1);
   }
-  pushArticleDetail = (e) => {
+  pushArticleDetail = (article, e) => {
     e.stopPropagation()
     Taro.navigateTo({
-      url: '/pages/article/index'
+      url: `/pages/article/index?id=${article.id}`
     })
   }
   /**
@@ -165,7 +159,7 @@ class Index extends Component<IProps, IState> {
     // }
     const { listData } = this.state
     const articleItemList = listData.map((article, index) => {
-      return <View className='article-item' onClick={this.pushArticleDetail} key={index}>
+      return <View className='article-item' onClick={this.pushArticleDetail.bind(this, article)} key={index}>
         <View className='article-item--title'><Text>{article.post_title}</Text></View>
         <View className='article-item--thumb'>
           <Image
@@ -179,11 +173,15 @@ class Index extends Component<IProps, IState> {
             {filterHtmlTags(article.post_content)}
           </Text>
         </View>
-        <View className='article-item--tag'>
-          {/* <AtIcon value='calendar' size='14'></AtIcon> */}
-          <Text className='article-item--time'>{article.post_date}</Text>
-          {/* <AtIcon value='eye' size='18'></AtIcon> */}
-          <Text className='article-item--view'>{article.comment_count}</Text>
+        <View className='article-item--tag flex'>
+          <View className='article-item--time flex m-r-16'>
+            <View className="ixu-icon ixu-icon-calendar text-gray m-r-8"></View>
+            <Text>{article.post_date}</Text>
+          </View>
+          <View className='article-item--view flex m-r-16'>
+            <View className="ixu-icon ixu-icon-view text-gray m-r-8"></View>
+            <Text>{article.comment_count}</Text>
+          </View>
         </View>
         <View className='article-item--line'></View>
       </View>

@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text, Icon } from '@tarojs/components'
+import { View, Text, ScrollView, Button } from '@tarojs/components'
 
 
 import './index.scss'
@@ -58,32 +58,67 @@ class Article extends Component {
 
   componentDidShow() {
   }
+  // 滚动到顶部
+  onScrollToUpper = (event) => {
+    console.log('onScrollToUpper', event);
+  }
+  // 滚动到底部
+  onScrollToLower = (event) => {
+    console.log('onScrollToLower', event);
+  }
+  // 滚动时触发
+  onScroll = (event) => {
+    // event.detail = {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY}
+    // console.log('onScroll', event.detail);
+  }
 
   componentDidHide() { }
   state = {
   }
   render() {
+    const scrollTop = 1
+    const Threshold = 50
     return (
-      <View className='page text-darker'>
-        {/* <View><Text>Hello, World</Text></View> */}
-        <View className="user-nav m-y-32 m-l-16 fs-32">
-          <View className="user-nav--item flex flex-dir-left p-y-20 p-l-16">
-            <Text>最近浏览</Text>
-            <Icon size='16' type='success' />
+      <View className='page page-gray text-darker'>
+        <ScrollView
+          className='page-scroll-view'
+          scrollY
+          scrollWithAnimation
+          enableBackToTop
+          lowerThreshold={Threshold}
+          upperThreshold={Threshold}
+          onScrollToUpper={this.onScrollToUpper}
+          onScrollToLower={this.onScrollToLower}
+          onScroll={this.onScroll}>
+          <View className='user-profile m-b-16'>
           </View>
-          <View className="user-nav--item flex flex-dir-left p-y-20 p-l-16">
-            <Text>项目合作</Text>
-            <Icon size='16' type='success' />
+          <View className="user-nav m-y-32 fs-32 page-white">
+            <View className="user-nav--item flex p-y-20 p-x-16">
+              <View className="user-nav--item__title flex-box-1">
+                <Text className=''>最近浏览</Text>
+              </View>
+              <View className="ixu-icon ixu-icon-arrow-right text-gray"></View>
+            </View>
+            <View className="user-nav--item flex p-y-20 p-x-16">
+              <View className="user-nav--item__title flex-box-1">
+                <Text className=''>项目合作</Text>
+              </View>
+              <View className="ixu-icon ixu-icon-arrow-right text-gray"></View>
+            </View>
+            <View className="user-nav--item flex p-y-20 p-x-16">
+              <View className="user-nav--item__title flex-box-1">
+                <Text className=''>联系作者</Text>
+              </View>
+              <View className="ixu-icon ixu-icon-arrow-right text-gray"></View>
+            </View>
+            <View className="user-nav--item flex p-y-20 p-x-16">
+              <View className="user-nav--item__title flex-box-1">
+                <Text className=''>关于小程序</Text>
+              </View>
+              <View className="ixu-icon ixu-icon-arrow-right text-gray"></View>
+            </View>
           </View>
-          <View className="user-nav--item flex flex-dir-left p-y-20 p-l-16">
-            <Text>联系作者</Text>
-            <Icon size='16' type='success' />
-          </View>
-          <View className="user-nav--item flex flex-dir-left p-y-20 p-l-16">
-            <Text>关于小程序</Text>
-            <Icon size='16' type='success' />
-          </View>
-        </View>
+        </ScrollView>
       </View>
     )
   }

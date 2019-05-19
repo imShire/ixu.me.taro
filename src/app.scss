@@ -1,4 +1,5 @@
 @import './assets/scss/style.scss';
+@import '//at.alicdn.com/t/font_965115_gfb9ie4m6vl.css';
 
 .fixed {
   bottom: 0;
@@ -13,6 +14,10 @@
 
 .page-gray {
   background-color: #f3f3f3;
+}
+
+.page-white{
+  background-color: $white;
 }
 
 .page-scroll-view {

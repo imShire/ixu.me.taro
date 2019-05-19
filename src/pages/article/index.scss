@@ -1,0 +1,32 @@
+.article {
+  &--thumb {}
+
+  &--title {
+    font-size: 40px;
+  }
+
+  &--tag {
+    padding: 8px 24px;
+    font-size: 24px;
+    color: #878787;
+
+    .ixu-icon {
+      vertical-align: middle;
+      font-size: 24px;
+    }
+  }
+
+  &--desc {
+    padding: 16px;
+    font-size: 32px;
+
+    pre {
+      background-color: #fdf6e3;
+      padding: 16px;
+      margin: 16px 0;
+      overflow: auto;
+      border-radius: 4px;
+      font-size: 28px;
+    }
+  }
+}
